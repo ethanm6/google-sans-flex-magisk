@@ -7,6 +7,7 @@ with zero prompts.
 - Module ID: `UnFont`
 - Version: `v1.1.0-auto`
 - Target environment: LineageOS, Android 16 (untested by upstream on A16)
+- Test device: Redmi Note 10 Pro
 
 ---
 
@@ -59,9 +60,8 @@ The rename is the actual fix. The STAT and GSUB changes are defensive extras.
 
 ## Installing
 
-1. Download the zip from the [Releases](../../releases) page.
-2. Flash it in Magisk Manager.
-3. Reboot.
+1. Flash `Google_Sans_Flex_v1.1.0-auto.zip` in Magisk Manager.
+2. Reboot.
 
 No prompts. The module installs the full 20-weight Roboto-named set (required
 by Gecko) plus GoogleSans / DroidSans / ProductSans / NotoSerif compatibility
@@ -104,15 +104,6 @@ To package the flashable zip (run from the module root):
 ```bash
 zip -r ../Google_Sans_Flex_v1.1.0-auto.zip . -x ".*"
 ```
-
----
-
-## Open items
-
-- **Chromium** — Rendering has been verified on Fennec/Gecko only. A Chromium
-  test would confirm the fix is system-wide.
-- **Magisk update support** — An `update.json` for Magisk in-app OTA updates
-  has not been added yet.
 
 ---
 
