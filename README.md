@@ -7,7 +7,6 @@ with zero prompts.
 - Module ID: `UnFont`
 - Version: `v1.1.0-auto`
 - Target environment: LineageOS, Android 16 (untested by upstream on A16)
-- Test device: Redmi Note 10 Pro
 
 ---
 
