@@ -1,0 +1,79 @@
+Signature-Version: 1.0
+SHA1-Digest-Manifest: bgjr5LFKd8KTkixzQtr6EeQzs4w=
+Created-By: 1.0 (Android SignApk)
+
+Name: META-INF/com/google/android/updater-script
+SHA1-Digest-Manifest: pVUJ9D5th6d2sD8aeNp5zhiBUcs=
+
+Name: uninstall.sh
+SHA1-Digest-Manifest: eGMtH5d2RW72k/FxHOHc9CR8tOQ=
+
+Name: files/Medium.ttf
+SHA1-Digest-Manifest: w0TgH92LrlrD9QRWKSFrchw5czY=
+
+Name: files/BlackItalic.ttf
+SHA1-Digest-Manifest: pYnpegsiPyMGRwX/ES0pCAZRCYg=
+
+Name: files/MediumItalic.ttf
+SHA1-Digest-Manifest: FT0BXKY0098wAitphUgEgDV2M2o=
+
+Name: customize.sh
+SHA1-Digest-Manifest: 0pfvpdkuog/3isZU0ygPXuasBzg=
+
+Name: files/BoldItalic.ttf
+SHA1-Digest-Manifest: Nh+UHpAxAg3otaSlGBka0rxr78o=
+
+Name: files/Thin.ttf
+SHA1-Digest-Manifest: RVzOklYcOF/eEfWEsUIStJty0Q8=
+
+Name: files/Regular.ttf
+SHA1-Digest-Manifest: 1IKrCyLUz39vdQTQaoSjUEc079U=
+
+Name: files/UbuntuCondensed-Regular.ttf
+SHA1-Digest-Manifest: mlHezrMMBaHpMm5l/8CyuabKa1c=
+
+Name: META-INF/com/google/android/update-binary
+SHA1-Digest-Manifest: ef4lD1hsmN+fD6KnkOkdiUmFgJc=
+
+Name: common/functions.sh
+SHA1-Digest-Manifest: i2ffyOI2UPrSLshRu6W5yXVL7wU=
+
+Name: files/ThinItalic.ttf
+SHA1-Digest-Manifest: MCnb5oSVMiqaiI9QRmoloNDmNcI=
+
+Name: files/Italic.ttf
+SHA1-Digest-Manifest: Ntaadi72mt2rlLdbKb6Rt/Ub8H8=
+
+Name: common/addon/Volume-Key-Selector/tools/arm/keycheck
+SHA1-Digest-Manifest: gA7oJtvR+g21rbICP2UVdjkgcxE=
+
+Name: common/addon/Volume-Key-Selector/README.md
+SHA1-Digest-Manifest: AzGXHnjGlORu33wGo115kuMgqM4=
+
+Name: common/addon/Volume-Key-Selector/preinstall.sh
+SHA1-Digest-Manifest: Y1V3vmM+Qtis6HOGtEWXk4D98js=
+
+Name: common/addon/Volume-Key-Selector/tools/x86/keycheck
+SHA1-Digest-Manifest: yXFZ77ftajKijHGUOUqadSOYiiY=
+
+Name: files/Light.ttf
+SHA1-Digest-Manifest: Fy2GhRxyWB6vORCDo4jlGlIT7Qo=
+
+Name: files/Bold.ttf
+SHA1-Digest-Manifest: NFgZk3zy689n8gnqnQO9GdlLdyY=
+
+Name: module.prop
+SHA1-Digest-Manifest: 22JdGHIYYxgDVFLSG2rix7sTZb8=
+
+Name: files/LightItalic.ttf
+SHA1-Digest-Manifest: idz4IJh9WFu/PQSTdTt1P4Fthu4=
+
+Name: files/xml/fonts.xml
+SHA1-Digest-Manifest: WPOs+WL6L1Zv2DNNqS3k7bLmP4E=
+
+Name: common/install.sh
+SHA1-Digest-Manifest: P0EsGqTLZPDzX52O8s/eaigsLdw=
+
+Name: files/Black.ttf
+SHA1-Digest-Manifest: u1Y3weC/GMquApoqjbUxraBvW1E=
+

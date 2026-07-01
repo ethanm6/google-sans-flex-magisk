@@ -1,0 +1,6 @@
+id=UnFont
+name=Font Google Sans Flex
+version=v1.1.0-auto
+versionCode=110
+author=AndroSYNC
+description=Systemlessly replaces Android system fonts with Google Sans Flex (internally renamed Roboto, smcp/c2sc patched for correct Gecko/Firefox rendering). Auto-installs full Roboto set + compatibility goodies, no prompts.
