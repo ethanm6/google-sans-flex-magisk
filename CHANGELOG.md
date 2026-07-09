@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.2.2-auto (2026-07-09)
+
+- `Font.ttf` is now the official Google Sans Flex v4.005 with only the
+  internal rename to Roboto. An on-device A/B test confirmed the rename
+  alone fixes the Gecko rendering bug — the earlier defensive extras
+  (STAT Regular instance, no-op `smcp`/`c2sc` small-caps features) were
+  unnecessary and are gone, along with ~50 KB of duplicate glyph data.
+- `patch_font.py` simplified accordingly (rename-only).
+- No behavior change on device; Cyrillic/Greek fallback and italics are
+  unchanged from v1.2.1.
+
 ## v1.2.1-auto (2026-07-09)
 
 - Fixed Cyrillic/Greek text rendering as boxes (tofu): Google Sans

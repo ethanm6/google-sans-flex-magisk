@@ -41,10 +41,10 @@ appearance. Android's renderer matches fonts by file path instead, which is
 why the bug looked web-only.
 
 **Fix:** the font's `name` table is patched so the family resolves as
-`Roboto`. Two defensive extras ride along: a STAT `wght=400 Regular` named
-instance, and no-op `smcp`/`c2sc` small-caps features built from inline
-glyph copies, so Gecko uses real glyphs instead of synthesizing small-caps
-if a site requests them.
+`Roboto` — that is the entire patch. (Earlier versions also added a STAT
+Regular instance and no-op small-caps features as defensive measures; an
+on-device A/B test showed the rename alone is sufficient, so they were
+dropped.)
 
 ---
 

@@ -5,22 +5,17 @@
 patch_font.py — Patch Google Sans Flex for use as an Android system font
 that renders correctly in Firefox/Gecko (Fennec).
 
-Three patches are applied:
+One patch is applied: RENAME the internal font family to "Roboto". Gecko
+resolves the CSS `sans-serif` family by the font's internal name and looks
+for "Roboto". With the original name ("Google Sans Flex") Gecko cannot
+match it and falls back to its bundled Fira Sans, which caused the
+small-caps / all-caps rendering bug.
 
-  1. RENAME  the internal font family to "Roboto". Gecko resolves the CSS
-     `sans-serif` family by the font's internal name and looks for "Roboto".
-     With the original name ("Google Sans Flex") Gecko cannot match it and
-     falls back to its bundled Fira Sans, which caused the small-caps /
-     all-caps rendering bug. This rename is the actual fix.
-
-  2. STAT    add a named `wght = 400 Regular` instance (the original font has
-     no named Regular instance, which can confuse Gecko's instance selection).
-
-  3. SMCP    add no-op `smcp` + `c2sc` OpenType features built from inline
-     copies of the a-z / A-Z outlines. Defensive only: if a site genuinely
-     requests small-caps, Gecko uses these real glyphs instead of synthesizing
-     them from uppercase. Inline copies are used rather than composites
-     because Gecko mis-rendered composite-based substitutions at bold weight.
+The rename is the entire fix. Earlier versions of this script also added a
+STAT wght=400 "Regular" instance (official GSF v4.005 already ships one)
+and no-op smcp/c2sc small-caps features as a defensive measure; an A/B test
+on-device (2026-07, Fennec on Android 16) confirmed a rename-only font
+renders identically, so both extras were dropped.
 
 Usage:
     pip install fonttools
@@ -30,19 +25,11 @@ If run with no arguments it defaults to:
     python3 patch_font.py Font.ttf Font.patched.ttf
 """
 
-import copy
 import sys
 
 from fontTools.ttLib import TTFont
-from fontTools.ttLib.tables._n_a_m_e import NameRecord
-from fontTools.ttLib.tables._g_l_y_f import Glyph, GlyphCoordinates
-from fontTools.ttLib.tables import otTables
-from fontTools.ttLib.tables.ttProgram import Program
 
 
-# ---------------------------------------------------------------------------
-# 1. Rename internal font family to "Roboto"
-# ---------------------------------------------------------------------------
 def rename_to_roboto(font):
     name = font["name"]
     renames = {
@@ -69,153 +56,16 @@ def rename_to_roboto(font):
     return changed
 
 
-# ---------------------------------------------------------------------------
-# 2. Add a named wght=400 Regular value to the STAT table
-# ---------------------------------------------------------------------------
-def add_stat_regular(font):
-    stat = font["STAT"].table
-    name = font["name"]
-
-    # Locate the wght axis (its index varies between GSF builds).
-    axis_tags = [a.AxisTag for a in stat.DesignAxisRecord.Axis]
-    wght_idx = axis_tags.index("wght")
-
-    # Skip if a wght=400 value already exists (any single-value format;
-    # official GSF v4.005 ships a Format 3 "Regular" record).
-    if stat.AxisValueArray:
-        for av in stat.AxisValueArray.AxisValue:
-            if getattr(av, "AxisIndex", None) == wght_idx \
-                    and getattr(av, "Value", None) == 400:
-                print("  STAT already has wght=400; skipping")
-                return
-
-    # Add a "Regular" name record at the next free nameID.
-    reg_id = max(r.nameID for r in name.names) + 1
-    for plat_id, enc_id, lang_id in [(3, 1, 0x0409), (1, 0, 0)]:
-        nr = NameRecord()
-        nr.nameID, nr.platformID, nr.platEncID, nr.langID = \
-            reg_id, plat_id, enc_id, lang_id
-        nr.string = ("Regular".encode("utf-16-be") if plat_id == 3
-                     else "Regular".encode("mac_roman"))
-        name.names.append(nr)
-
-    av = otTables.AxisValue()
-    av.Format = 1
-    av.AxisIndex = wght_idx
-    av.Flags = 0x0002         # ELIDABLE (default, omit from style name)
-    av.ValueNameID = reg_id
-    av.Value = 400.0
-
-    if stat.AxisValueArray is None:
-        stat.AxisValueArray = otTables.AxisValueArray()
-        stat.AxisValueArray.AxisValue = []
-    stat.AxisValueArray.AxisValue.append(av)
-    print(f"  STAT: added wght=400 Regular (ELIDABLE, nameID {reg_id})")
-
-
-# ---------------------------------------------------------------------------
-# 3. Add no-op smcp / c2sc features from inline glyph copies
-# ---------------------------------------------------------------------------
-def _inline_copy(glyf, src_name, new_name):
-    """Return a standalone Glyph that duplicates src_name's outlines."""
-    src = glyf[src_name]
-    src.expand(glyf)
-    if src.isComposite() or src.numberOfContours <= 0:
-        return None
-    g = Glyph()
-    g.numberOfContours = src.numberOfContours
-    g.coordinates = GlyphCoordinates(list(src.coordinates))
-    g.flags = copy.copy(src.flags)
-    g.endPtsOfContours = copy.copy(src.endPtsOfContours)
-    g.program = Program()     # no TT hinting
-    return g
-
-
-def _single_subst_lookup(mapping):
-    lk = otTables.Lookup()
-    lk.LookupType = 1
-    lk.LookupFlag = 0
-    st = otTables.SingleSubst()
-    st.Format = 2
-    st.mapping = dict(mapping)
-    lk.SubTable = [st]
-    lk.SubTableIndex = [0]
-    return lk
-
-
-def add_smallcaps(font):
-    cmap = font.getBestCmap()
-    glyf = font["glyf"]
-    hmtx = font["hmtx"]
-
-    smcp_map, c2sc_map = {}, {}   # lowercase->.sc , uppercase->.sc
-
-    for lo, up in zip("abcdefghijklmnopqrstuvwxyz",
-                      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"):
-        lg, ug = cmap.get(ord(lo)), cmap.get(ord(up))
-        if not lg or not ug:
-            continue
-        # smcp: lowercase 'a' -> a.sc (copy of 'a' so it renders normally)
-        g = _inline_copy(glyf, lg, f"{lg}.sc")
-        if g is not None:
-            glyf[f"{lg}.sc"] = g
-            hmtx.metrics[f"{lg}.sc"] = hmtx.metrics[lg]
-            smcp_map[lg] = f"{lg}.sc"
-        # c2sc: uppercase 'A' -> A.sc (copy of 'A')
-        g2 = _inline_copy(glyf, ug, f"{ug}.sc")
-        if g2 is not None:
-            glyf[f"{ug}.sc"] = g2
-            hmtx.metrics[f"{ug}.sc"] = hmtx.metrics[ug]
-            c2sc_map[ug] = f"{ug}.sc"
-
-    # Register new glyph names.
-    order = list(font.getGlyphOrder())
-    for n in list(smcp_map.values()) + list(c2sc_map.values()):
-        if n not in order:
-            order.append(n)
-    font.setGlyphOrder(order)
-
-    gsub = font["GSUB"].table
-    smcp_idx = len(gsub.LookupList.Lookup)
-    gsub.LookupList.Lookup.append(_single_subst_lookup(smcp_map))
-    c2sc_idx = smcp_idx + 1
-    gsub.LookupList.Lookup.append(_single_subst_lookup(c2sc_map))
-
-    for tag, lk_idx in (("smcp", smcp_idx), ("c2sc", c2sc_idx)):
-        fr = otTables.FeatureRecord()
-        fr.FeatureTag = tag
-        fr.Feature = otTables.Feature()
-        fr.Feature.FeatureParams = None
-        fr.Feature.LookupListIndex = [lk_idx]
-        feat_idx = len(gsub.FeatureList.FeatureRecord)
-        gsub.FeatureList.FeatureRecord.append(fr)
-        # Register in every script and language system so it always applies.
-        for sr in gsub.ScriptList.ScriptRecord:
-            if sr.Script.DefaultLangSys:
-                sr.Script.DefaultLangSys.FeatureIndex.append(feat_idx)
-            for lsr in (sr.Script.LangSysRecord or []):
-                lsr.LangSys.FeatureIndex.append(feat_idx)
-
-    print(f"  GSUB: added smcp ({len(smcp_map)} glyphs) "
-          f"and c2sc ({len(c2sc_map)} glyphs)")
-
-
-# ---------------------------------------------------------------------------
 def main():
     inp = sys.argv[1] if len(sys.argv) > 1 else "Font.ttf"
     out = sys.argv[2] if len(sys.argv) > 2 else "Font.patched.ttf"
 
     print(f"Loading {inp}")
     font = TTFont(inp)
+    n_cmap = len(font.getBestCmap())
 
-    print("[1/3] Renaming family to Roboto")
+    print("Renaming family to Roboto")
     rename_to_roboto(font)
-
-    print("[2/3] Adding wght=400 Regular to STAT")
-    add_stat_regular(font)
-
-    print("[3/3] Adding smcp/c2sc features")
-    add_smallcaps(font)
 
     font.save(out)
     print(f"Saved {out}")
@@ -223,20 +73,15 @@ def main():
     # ---- self-check ----
     chk = TTFont(out)
     fam = chk["name"].getDebugName(1)
-    feats = sorted({f.FeatureTag for f in
-                    chk["GSUB"].table.FeatureList.FeatureRecord})
-    wght_idx = [a.AxisTag for a in
-                chk["STAT"].table.DesignAxisRecord.Axis].index("wght")
-    has_reg = any(getattr(av, "AxisIndex", None) == wght_idx
-                  and getattr(av, "Value", None) == 400
-                  for av in chk["STAT"].table.AxisValueArray.AxisValue)
+    ps = chk["name"].getDebugName(6)
+    n_cmap_out = len(chk.getBestCmap())
     print("\nVerification:")
-    print(f"  family name      : {fam}")
-    print(f"  smcp / c2sc      : {'smcp' in feats} / {'c2sc' in feats}")
-    print(f"  STAT wght=400    : {has_reg}")
+    print(f"  family name     : {fam}")
+    print(f"  PostScript name : {ps}")
+    print(f"  cmap entries    : {n_cmap_out} (input had {n_cmap})")
     assert fam == "Roboto", "rename failed"
-    assert "smcp" in feats and "c2sc" in feats, "smallcaps failed"
-    assert has_reg, "STAT Regular failed"
+    assert ps == "Roboto-Regular", "PostScript rename failed"
+    assert n_cmap_out == n_cmap, "cmap changed"
     print("  all checks passed")
 
 
