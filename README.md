@@ -181,13 +181,7 @@ for the full mapping and copyright notices. In short:
 
 ## Disclaimer
 
-This project is unofficial, unaffiliated with and unendorsed by Google. All
-trademarks, font assets, and original code referenced here remain the
-property of their respective owners. This module is provided **as-is**, with
-no warranty of any kind, express or implied, including but not limited to
-fitness for a particular purpose or non-infringement. Use it at your own
-risk — flashing modules that patch system fonts can affect device stability,
-and the author of this fork assumes no liability for damage, data loss, or
-other consequences arising from its use. If you are the rights holder of any
-asset included here and object to its distribution, please open an issue
-and it will be addressed.
+This project is unofficial and is not affiliated with or endorsed by Google.
+It is provided **as-is**, without warranty of any kind — the component
+licenses above carry the full warranty and liability disclaimers. Flash at
+your own risk: modules that patch system fonts can affect device stability.
