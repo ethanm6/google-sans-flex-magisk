@@ -59,8 +59,9 @@ The rename is the actual fix. The STAT and GSUB changes are defensive extras.
 
 ## Installing
 
-1. Flash `Google_Sans_Flex_v1.1.0-auto.zip` in Magisk Manager.
-2. Reboot.
+1. Download the zip from the [Releases](../../releases) page.
+2. Flash it in Magisk Manager.
+3. Reboot.
 
 No prompts. The module installs the full 20-weight Roboto-named set (required
 by Gecko) plus GoogleSans / DroidSans / ProductSans / NotoSerif compatibility
@@ -98,10 +99,13 @@ EOF
 # expect: family name "Roboto", smcp/c2sc in features, STAT wght=400 True
 ```
 
-To package the flashable zip (run from the module root):
+To package the flashable zip (run from the repo root; repo-only files are
+excluded — they aren't part of the module):
 
 ```bash
-zip -r ../Google_Sans_Flex_v1.1.0-auto.zip . -x ".*"
+zip -r ../Google_Sans_Flex.zip . \
+  -x ".*" -x ".git/*" -x "README.md" -x "patch_font.py" \
+  -x "CHANGELOG.md" -x "update.json"
 ```
 
 ---
