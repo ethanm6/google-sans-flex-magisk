@@ -7,7 +7,6 @@ SYSXML=$SYSETC/fonts.xml
 MODPROP=$MODPATH/module.prop
 
 header() {
-    cp $FONTDIR/*ttf $SYSFONT;
 	ln -sf Font.ttf  "$SYSFONT/Roboto-Black.ttf"
 	ln -sf Font.ttf  "$SYSFONT/Roboto-BlackItalic.ttf"
 	ln -sf Font.ttf  "$SYSFONT/Roboto-Bold.ttf"
@@ -17,7 +16,6 @@ header() {
 }
 
 headline() {
-    cp $FONTDIR/*ttf $SYSFONT;
 	ln -sf Font.ttf  "$SYSFONT/Black.ttf"
 	ln -sf Font.ttf  "$SYSFONT/BlackItalic.ttf"
 	ln -sf Font.ttf  "$SYSFONT/Bold.ttf"
@@ -27,7 +25,6 @@ headline() {
 }
 
 body() {
-    cp $FONTDIR/*ttf $SYSFONT;
 	ln -sf Font.ttf  "$SYSFONT/Roboto-Italic.ttf"
 	ln -sf Font.ttf  "$SYSFONT/Roboto-Light.ttf"
 	ln -sf Font.ttf  "$SYSFONT/Roboto-LightItalic.ttf"
@@ -37,7 +34,6 @@ body() {
 }
 
 condensed() {
-    cp $FONTDIR/*ttf $SYSFONT;
     ln -sf Font.ttf  "$SYSFONT/RobotoCondensed-Bold.ttf"
 	ln -sf Font.ttf  "$SYSFONT/RobotoCondensed-BoldItalic.ttf"
 	ln -sf Font.ttf  "$SYSFONT/RobotoCondensed-Italic.ttf"
@@ -54,7 +50,6 @@ full() { headline; header; body; condensed;
 }
 
 mistu() {
-    cp $FONTDIR/*ttf $SYSFONT;
     ln -sf Font.ttf  "$SYSFONT/GoogleSans-Regular.ttf"
 	ln -sf Font.ttf  "$SYSFONT/GoogleSans-Bold.ttf"
 	ln -sf Font.ttf  "$SYSFONT/GoogleSans-BoldItalic.ttf"
@@ -79,8 +74,6 @@ mistu() {
 cleanup() {
 	cp $FONTDIR/fonts.xml $SYSETC
 	rm -rf $FONTDIR
-	rmdir -p $PRDFONT
-	rm -rf $SYSFONT/UbuntuCondensed-Regular.ttf
 }
 
 ### INSTALLATION ###
@@ -92,9 +85,10 @@ ui_print "- Installing..."
 ui_print "   "
 
 mkdir -p $SYSFONT $SYSETC $PRDFONT $PRDETC
+cp $FONTDIR/*.ttf $SYSFONT
 
-full;  sed -ie 3's/$/+FULL&/' $MODPROP
-mistu; sed -ie 3's/$/+(gds)&/' $MODPROP
+full;  sed -i -e 3's/$/+FULL&/' $MODPROP
+mistu; sed -i -e 3's/$/+(gds)&/' $MODPROP
 
 ### CLEAN UP ###
 ui_print "- Installation completed."
