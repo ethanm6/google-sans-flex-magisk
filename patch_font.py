@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2026 ethanm6 — see LICENSE-GPL3.txt
 """
 patch_font.py — Patch Google Sans Flex for use as an Android system font
 that renders correctly in Firefox/Gecko (Fennec).

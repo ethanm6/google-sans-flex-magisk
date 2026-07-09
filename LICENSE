@@ -1,0 +1,32 @@
+This project combines components under different licenses. Each component
+keeps its own license; the full texts are in the files referenced below.
+
+1. Fonts — SIL Open Font License 1.1 (see LICENSE-OFL.txt)
+   - files/Font.ttf
+     Modified version of Google Sans Flex.
+     Copyright 2015 Google LLC. All Rights Reserved.
+   - files/GoogleSansVF.ttf
+     Unmodified Google Sans.
+     Copyright 2025 The Google Sans Project Authors
+     (https://github.com/googlefonts/googlesans)
+   The OFL requires the fonts, modified or unmodified, to remain under the
+   OFL. They are bundled here with software of other licenses, which the OFL
+   explicitly permits.
+
+2. Installer scripts — GNU General Public License v2.0 (see LICENSE-GPL2.txt)
+   - customize.sh, uninstall.sh, common/functions.sh, common/install.sh,
+     META-INF/com/google/android/update-binary, updater-script
+   Derived from the MMT-Extended module template,
+   Copyright Zackptg5 (https://github.com/Zackptg5/MMT-Extended), GPL-2.0,
+   by way of AndroSYNC's font module. Modifications for this module
+   Copyright 2026 ethanm6, likewise under GPL-2.0.
+
+3. Font configuration — Apache License 2.0 (see LICENSE-Apache2.txt)
+   - files/fonts.xml, files/font_fallback.xml
+   Derived from the Android Open Source Project / LineageOS system font
+   configuration, Copyright The Android Open Source Project.
+
+4. Font patch script — GNU General Public License v3.0 or later
+   (see LICENSE-GPL3.txt)
+   - patch_font.py (repository only; not part of the flashable zip)
+   Copyright 2026 ethanm6.
