@@ -6,7 +6,7 @@ browsers, with **Google Sans** bundled as the Cyrillic/Greek fallback.
 Installs with zero prompts.
 
 - Module ID: `UnFont`
-- Version: `v1.2.0-auto`
+- Version: `v1.2.1-auto`
 - Target environment: LineageOS, Android 16
 
 ---
@@ -61,7 +61,7 @@ The rename is the actual fix. The STAT and GSUB changes are defensive extras.
 
 ---
 
-## Cyrillic / Greek (fixed in v1.2.0)
+## Cyrillic / Greek (fixed in v1.2.1)
 
 **Symptom:** Russian and Ukrainian text showed boxes (tofu) mixed into the
 text.
@@ -76,13 +76,22 @@ nowhere to fall back to.
 
 **Fix:** The module bundles **Google Sans** (the non-Flex sibling, which has
 full Cyrillic — including Ukrainian І ї Є ґ — and Greek) as
-`GoogleSansVF.ttf`, registered in `fonts.xml` as the first fallback family.
-It's the same superfamily, so mixed-script text keeps a consistent
-Google Sans look.
+`GoogleSansVF.ttf`, registered as the first fallback family in the system
+font configuration. It's the same superfamily, so mixed-script text keeps a
+consistent Google Sans look.
 
-v1.2.0 also upgrades the main font to the official Google Fonts v4.005
-build, which adds a `slnt` (slant) axis — `fonts.xml` italic entries now use
-it, so system italics are real obliques instead of being silently ignored.
+One subtlety matters here: since Android 13 the renderer reads
+`/system/etc/font_fallback.xml`, not the legacy `fonts.xml` (which is kept
+only for apps that parse it directly). The module therefore patches and
+installs **both** files — a fallback family added only to `fonts.xml` is
+silently ignored on modern Android.
+
+v1.2.x also upgrades the main font to the official Google Fonts v4.005
+build, which adds a `slnt` (slant) axis. The config entries for italic now
+instantiate it (stock declares an `ital` axis Google Sans Flex doesn't
+have), so system italics are real obliques instead of being silently
+ignored. Bold/italic entries for the masked NotoSerif files get explicit
+`wght`/`slnt` values for the same reason.
 
 ---
 
@@ -114,6 +123,13 @@ pip install fonttools
 python3 patch_font.py GoogleSansFlex.ttf files/Font.ttf
 ```
 
+`files/fonts.xml` and `files/font_fallback.xml` are the stock LineageOS /
+AOSP font configs with three kinds of edits: the Google Sans fallback family
+inserted first in the fallback list, `ital` axis references replaced with
+the font's real `slnt` axis, and explicit `wght`/`slnt` values on entries
+whose stock file the module masks. If your ROM's stock configs differ
+significantly, re-apply those edits to your device's own copies.
+
 The script applies three patches in sequence and runs a self-check on exit.
 You can also verify an already-built font manually:
 
@@ -141,6 +157,25 @@ zip -r ../Google_Sans_Flex.zip . \
   -x ".*" -x ".git/*" -x "README.md" -x "patch_font.py" \
   -x "CHANGELOG.md" -x "update.json"
 ```
+
+---
+
+## Licensing
+
+Each component keeps its own license — see the [`LICENSE`](LICENSE) index
+for the full mapping and copyright notices. In short:
+
+- **Fonts** (`Font.ttf`, `GoogleSansVF.ttf`) — SIL Open Font License 1.1
+  ([`LICENSE-OFL.txt`](LICENSE-OFL.txt)). The OFL requires the fonts to stay
+  under the OFL.
+- **Installer scripts** — GPL-2.0 ([`LICENSE-GPL2.txt`](LICENSE-GPL2.txt)),
+  inherited from the [MMT-Extended](https://github.com/Zackptg5/MMT-Extended)
+  template they derive from.
+- **Font configs** (`fonts.xml`, `font_fallback.xml`) — Apache-2.0
+  ([`LICENSE-Apache2.txt`](LICENSE-Apache2.txt)), derived from AOSP /
+  LineageOS.
+- **`patch_font.py`** — GPL-3.0-or-later
+  ([`LICENSE-GPL3.txt`](LICENSE-GPL3.txt)).
 
 ---
 

@@ -74,6 +74,9 @@ mistu() {
 
 cleanup() {
 	cp $FONTDIR/fonts.xml $SYSETC
+	# Android 13+ reads font_fallback.xml, not fonts.xml — without this the
+	# Cyrillic/Greek fallback family is never seen. Skip on older Androids.
+	[ -f /system/etc/font_fallback.xml ] && cp $FONTDIR/font_fallback.xml $SYSETC
 	rm -rf $FONTDIR
 }
 
