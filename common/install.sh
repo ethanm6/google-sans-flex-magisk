@@ -45,8 +45,9 @@ condensed() {
 }
 
 full() { headline; header; body; condensed;
-    ln -sf Font.ttf  "$PRDFONT/GoogleSans-Regular.ttf"
-	ln -sf Font.ttf  "$PRDFONT/GoogleSans-Italic.ttf"
+    # absolute target: Font.ttf lives in /system/fonts, not the product dir
+    ln -sf /system/fonts/Font.ttf  "$PRDFONT/GoogleSans-Regular.ttf"
+	ln -sf /system/fonts/Font.ttf  "$PRDFONT/GoogleSans-Italic.ttf"
 }
 
 mistu() {

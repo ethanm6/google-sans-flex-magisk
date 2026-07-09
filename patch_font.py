@@ -74,16 +74,16 @@ def add_stat_regular(font):
     stat = font["STAT"].table
     name = font["name"]
 
-    # wght must be axis 0; verify so we don't write a wrong AxisIndex.
+    # Locate the wght axis (its index varies between GSF builds).
     axis_tags = [a.AxisTag for a in stat.DesignAxisRecord.Axis]
-    if axis_tags.index("wght") != 0:
-        raise RuntimeError(f"Expected wght at axis 0, got order {axis_tags}")
+    wght_idx = axis_tags.index("wght")
 
-    # Skip if a wght=400 value already exists.
+    # Skip if a wght=400 value already exists (any single-value format;
+    # official GSF v4.005 ships a Format 3 "Regular" record).
     if stat.AxisValueArray:
         for av in stat.AxisValueArray.AxisValue:
-            if getattr(av, "Format", None) == 1 and av.AxisIndex == 0 \
-                    and av.Value == 400:
+            if getattr(av, "AxisIndex", None) == wght_idx \
+                    and getattr(av, "Value", None) == 400:
                 print("  STAT already has wght=400; skipping")
                 return
 
@@ -99,7 +99,7 @@ def add_stat_regular(font):
 
     av = otTables.AxisValue()
     av.Format = 1
-    av.AxisIndex = 0          # wght
+    av.AxisIndex = wght_idx
     av.Flags = 0x0002         # ELIDABLE (default, omit from style name)
     av.ValueNameID = reg_id
     av.Value = 400.0
@@ -223,8 +223,10 @@ def main():
     fam = chk["name"].getDebugName(1)
     feats = sorted({f.FeatureTag for f in
                     chk["GSUB"].table.FeatureList.FeatureRecord})
-    has_reg = any(getattr(av, "Format", None) == 1 and av.AxisIndex == 0
-                  and av.Value == 400
+    wght_idx = [a.AxisTag for a in
+                chk["STAT"].table.DesignAxisRecord.Axis].index("wght")
+    has_reg = any(getattr(av, "AxisIndex", None) == wght_idx
+                  and getattr(av, "Value", None) == 400
                   for av in chk["STAT"].table.AxisValueArray.AxisValue)
     print("\nVerification:")
     print(f"  family name      : {fam}")

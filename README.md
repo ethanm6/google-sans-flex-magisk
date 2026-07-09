@@ -1,12 +1,13 @@
 # UnFont — Google Sans Flex for Android (Magisk module)
 
-Systemlessly replaces the Android system font with **Google Sans Flex**,
-patched so it renders correctly in Firefox/Gecko-based browsers. Installs
-with zero prompts.
+Systemlessly replaces the Android system font with **Google Sans Flex**
+(official v4.005), patched so it renders correctly in Firefox/Gecko-based
+browsers, with **Google Sans** bundled as the Cyrillic/Greek fallback.
+Installs with zero prompts.
 
 - Module ID: `UnFont`
-- Version: `v1.1.0-auto`
-- Target environment: LineageOS, Android 16 (untested by upstream on A16)
+- Version: `v1.2.0-auto`
+- Target environment: LineageOS, Android 16
 
 ---
 
@@ -19,7 +20,10 @@ All installer scaffolding — `common/functions.sh`, the MMT-Extended
 originates there. This fork's contribution is the font patch and a
 streamlined, no-prompt installer that removes the ROM-selection menu.
 
-The font itself is **Google Sans Flex**, © Google.
+The fonts are **Google Sans Flex** and **Google Sans**, © Google, both
+published on [Google Fonts](https://fonts.google.com/specimen/Google+Sans+Flex)
+under the SIL Open Font License 1.1 — see `LICENSE-OFL.txt`, which the OFL
+requires to accompany the fonts.
 
 ---
 
@@ -57,6 +61,31 @@ The rename is the actual fix. The STAT and GSUB changes are defensive extras.
 
 ---
 
+## Cyrillic / Greek (fixed in v1.2.0)
+
+**Symptom:** Russian and Ukrainian text showed boxes (tofu) mixed into the
+text.
+
+**Root cause:** Google Sans Flex contains no Cyrillic or Greek glyphs at all
+— not in any build Google distributes (verified against the official Google
+Fonts release and Pixel system dumps; Pixels themselves quietly fall back to
+Roboto for these scripts). Stock Android has no separate Cyrillic/Greek
+fallback font because Roboto itself is that coverage — so once this module
+masks every Roboto file with a Latin-only font, those characters have
+nowhere to fall back to.
+
+**Fix:** The module bundles **Google Sans** (the non-Flex sibling, which has
+full Cyrillic — including Ukrainian І ї Є ґ — and Greek) as
+`GoogleSansVF.ttf`, registered in `fonts.xml` as the first fallback family.
+It's the same superfamily, so mixed-script text keeps a consistent
+Google Sans look.
+
+v1.2.0 also upgrades the main font to the official Google Fonts v4.005
+build, which adds a `slnt` (slant) axis — `fonts.xml` italic entries now use
+it, so system italics are real obliques instead of being silently ignored.
+
+---
+
 ## Installing
 
 1. Download the zip from the [Releases](../../releases) page.
@@ -66,18 +95,23 @@ The rename is the actual fix. The STAT and GSUB changes are defensive extras.
 No prompts. The module installs the full 20-weight Roboto-named set (required
 by Gecko) plus GoogleSans / DroidSans / ProductSans / NotoSerif compatibility
 symlinks for broader app and ROM support. All installed font files are
-symlinks back to a single patched `Font.ttf`.
+symlinks back to a single patched `Font.ttf`, plus the real
+`GoogleSansVF.ttf` for Cyrillic/Greek fallback.
 
 ---
 
 ## Rebuilding the font
 
-The patch is scripted in `patch_font.py` and requires
+Both fonts come from Google Fonts (find the current variable-TTF URLs via
+`https://fonts.google.com/download/list?family=Google%20Sans%20Flex` and
+`...family=Google%20Sans`). `files/GoogleSansVF.ttf` is the Google Sans
+variable TTF, unmodified. `files/Font.ttf` is the Google Sans Flex variable
+TTF run through `patch_font.py`, which requires
 [fonttools](https://github.com/fonttools/fonttools):
 
 ```bash
 pip install fonttools
-python3 patch_font.py Font.ttf Font.patched.ttf
+python3 patch_font.py GoogleSansFlex.ttf files/Font.ttf
 ```
 
 The script applies three patches in sequence and runs a self-check on exit.
