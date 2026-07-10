@@ -112,6 +112,14 @@ for the full mapping and copyright notices. In short:
 
 ---
 
+## Support
+
+If you find this project useful, you can support development:
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/ethanm6)
+
+---
+
 ## Disclaimer
 
 This project is unofficial and is not affiliated with or endorsed by Google.
