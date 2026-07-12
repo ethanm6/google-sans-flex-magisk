@@ -6,8 +6,12 @@ browsers. **Google Sans** is bundled as the fallback for Cyrillic and Greek
 (scripts Google Sans Flex doesn't cover), registered in the system font
 configs — `font_fallback.xml`, the one Android 13+ actually reads, plus the
 legacy `fonts.xml` — so mixed-script text keeps a consistent Google Sans
-look, and italics use the font's real `slnt` axis. Installs with zero
-prompts; updates are offered in Magisk directly.
+look, and italics use the font's real `slnt` axis. Stock **Roboto** also
+rides along (as `RobotoFB.ttf`) as a last-resort fallback for the ~1,600
+characters neither Google font covers — combining marks, modifier letters,
+extended Latin/Cyrillic/Greek — so nothing that rendered before the module
+turns to tofu under it. Installs with zero prompts; updates are offered in
+Magisk directly.
 
 - Module ID: `UnFont`
 - Target environment: LineageOS, Android 16
@@ -57,7 +61,8 @@ dropped.)
 The module installs the full 20-weight Roboto-named set (required by Gecko)
 plus GoogleSans / DroidSans / ProductSans / NotoSerif compatibility
 symlinks — all pointing at the single patched `Font.ttf`, with the real
-`GoogleSansVF.ttf` alongside for Cyrillic/Greek fallback.
+`GoogleSansVF.ttf` (Cyrillic/Greek fallback) and `RobotoFB.ttf` (last-resort
+safety net) alongside.
 
 ---
 
@@ -66,7 +71,13 @@ symlinks — all pointing at the single patched `Font.ttf`, with the real
 Both fonts come from Google Fonts (find the current variable-TTF URLs via
 `https://fonts.google.com/download/list?family=Google%20Sans%20Flex` and
 `...family=Google%20Sans`). `files/GoogleSansVF.ttf` is the Google Sans
-variable TTF, unmodified. `files/Font.ttf` is the Google Sans Flex variable
+variable TTF, unmodified. `files/RobotoFB.ttf` is a stock Android Roboto
+variable TTF (e.g. from
+[roboto-classic](https://github.com/googlefonts/roboto-classic)) with its
+internal family renamed to `RobotoFB` — the rename matters: a font still
+internally named `Roboto` would make Gecko resolve the `Roboto` family to
+it instead of Google Sans Flex, reintroducing the bug this module fixes.
+`files/Font.ttf` is the Google Sans Flex variable
 TTF run through `patch_font.py` (which self-checks on exit; requires
 [fonttools](https://github.com/fonttools/fonttools)):
 
@@ -98,7 +109,8 @@ zip -r ../Google_Sans_Flex.zip . \
 Each component keeps its own license — see the [`LICENSE`](LICENSE) index
 for the full mapping and copyright notices. In short:
 
-- **Fonts** (`Font.ttf`, `GoogleSansVF.ttf`) — SIL Open Font License 1.1
+- **Fonts** (`Font.ttf`, `GoogleSansVF.ttf`, `RobotoFB.ttf`) — SIL Open
+  Font License 1.1
   ([`LICENSE-OFL.txt`](LICENSE-OFL.txt)). The OFL requires the fonts to stay
   under the OFL.
 - **Installer scripts** — GPL-2.0 ([`LICENSE-GPL2.txt`](LICENSE-GPL2.txt)),

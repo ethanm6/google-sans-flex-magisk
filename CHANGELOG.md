@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.2.3-auto (2026-07-12)
+
+- Fixed tofu for characters that stock Roboto covered but neither Google
+  Sans Flex nor Google Sans has — ~1,600 codepoints, notably combining
+  marks (e.g. the U+0336 strikethrough trick common in social-media
+  titles), modifier letters, and extended Latin/Cyrillic/Greek. The
+  device's stock Roboto now ships as `RobotoFB.ttf`, registered as a
+  safety-net fallback family in both font configs.
+- The bundled Roboto is internally renamed to `RobotoFB` so Gecko browsers
+  keep resolving the `Roboto` family to Google Sans Flex.
+
 ## v1.2.2-auto (2026-07-09)
 
 - `Font.ttf` is now the official Google Sans Flex v4.005 with only the

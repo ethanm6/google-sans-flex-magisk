@@ -82,7 +82,7 @@ cleanup() {
 
 ### INSTALLATION ###
 ui_print "   "
-ui_print "- Google Sans Flex (Roboto-named, smcp-patched)"
+ui_print "- Google Sans Flex (Roboto-named for Gecko)"
 ui_print "- Auto config: Full Roboto set + compatibility goodies"
 ui_print "   "
 ui_print "- Installing..."

@@ -9,6 +9,10 @@ keeps its own license; the full texts are in the files referenced below.
      Unmodified Google Sans.
      Copyright 2025 The Google Sans Project Authors
      (https://github.com/googlefonts/googlesans)
+   - files/RobotoFB.ttf
+     Modified version of Roboto (internally renamed to "RobotoFB").
+     Copyright 2011 The Roboto Project Authors
+     (https://github.com/googlefonts/roboto-classic)
    The OFL requires the fonts, modified or unmodified, to remain under the
    OFL. They are bundled here with software of other licenses, which the OFL
    explicitly permits.

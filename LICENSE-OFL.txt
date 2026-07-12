@@ -1,13 +1,17 @@
-This module redistributes the following fonts, both licensed under the
+This module redistributes the following fonts, all licensed under the
 SIL Open Font License, Version 1.1:
 
 Google Sans Flex (files/Font.ttf, modified — renamed internally to
-"Roboto", smcp/c2sc features added):
+"Roboto"):
   Copyright 2015 Google LLC. All Rights Reserved.
 
 Google Sans (files/GoogleSansVF.ttf, unmodified):
   Copyright 2025 The Google Sans Project Authors
   (github.com/googlefonts/googlesans)
+
+Roboto (files/RobotoFB.ttf, modified — renamed internally to "RobotoFB"):
+  Copyright 2011 The Roboto Project Authors
+  (github.com/googlefonts/roboto-classic)
 
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.

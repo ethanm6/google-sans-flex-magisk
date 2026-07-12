@@ -84,6 +84,14 @@
   <family lang="und-Cyrl,und-Grek">
     <font supportedAxes="wght" postScriptName="GoogleSans-Regular">GoogleSansVF.ttf</font>
   </family>
+  <!-- UnFont module: the stock Roboto (internally renamed RobotoFB) as a safety
+       net for every character stock Roboto covered but Google Sans Flex / Google
+       Sans lack: combining marks (e.g. U+0336 strikethrough), modifier letters,
+       extended Latin/Cyrillic/Greek. Renamed so Gecko browsers keep resolving
+       the "Roboto" family to Google Sans Flex. -->
+  <family>
+    <font supportedAxes="wght,ital" postScriptName="RobotoFB-Regular">RobotoFB.ttf</font>
+  </family>
   <family lang="und-Arab" variant="elegant">
     <font weight="400" style="normal" postScriptName="NotoNaskhArabic">NotoNaskhArabic-Regular.ttf</font>
     <font weight="700" style="normal">NotoNaskhArabic-Bold.ttf</font>

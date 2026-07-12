@@ -298,6 +298,26 @@
         </font>
     </family>
 
+    <!-- UnFont module: stock Roboto (renamed RobotoFB) as a safety net for
+         characters Google Sans Flex / Google Sans lack (combining marks,
+         modifier letters, extended Latin/Cyrillic/Greek). -->
+    <family>
+        <font weight="400" style="normal">RobotoFB.ttf</font>
+        <font weight="500" style="normal">RobotoFB.ttf
+          <axis tag="wght" stylevalue="500" />
+        </font>
+        <font weight="700" style="normal">RobotoFB.ttf
+          <axis tag="wght" stylevalue="700" />
+        </font>
+        <font weight="400" style="italic">RobotoFB.ttf
+          <axis tag="ital" stylevalue="1" />
+        </font>
+        <font weight="700" style="italic">RobotoFB.ttf
+          <axis tag="wght" stylevalue="700" />
+          <axis tag="ital" stylevalue="1" />
+        </font>
+    </family>
+
     <family lang="und-Arab" variant="elegant">
         <font weight="400" style="normal" postScriptName="NotoNaskhArabic">
             NotoNaskhArabic-Regular.ttf
