@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.3.0-auto (2026-07-15)
+
+- Slimmed the module from 5.9 MB to 3.5 MB with no rendering change:
+  - `GoogleSansVF.ttf` (4.7 MB → 0.5 MB): subset to its actual job — the
+    Cyrillic/Greek fallback, plus the combining marks, punctuation, and
+    currency signs that appear inside those scripts. The ~2,400 characters
+    it never rendered (Google Sans Flex always wins Latin) are gone, and
+    the unused `GRAD` axis is pinned.
+  - `RobotoFB.ttf` (2.4 MB → 1.3 MB): unused `wdth` axis pinned. All 2,797
+    characters are kept.
+- `Font.ttf` itself is untouched: Android 16's lock-screen clock animates
+  its `GRAD`/`ROND` axes and Gecko drives `opsz`, so the main font must
+  keep all six variation axes.
+
 ## v1.2.3-auto (2026-07-12)
 
 - Fixed tofu for characters that stock Roboto covered but neither Google

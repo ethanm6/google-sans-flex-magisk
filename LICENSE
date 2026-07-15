@@ -6,11 +6,13 @@ keeps its own license; the full texts are in the files referenced below.
      Modified version of Google Sans Flex.
      Copyright 2015 Google LLC. All Rights Reserved.
    - files/GoogleSansVF.ttf
-     Unmodified Google Sans.
+     Modified version of Google Sans (subset to its fallback role —
+     Cyrillic, Greek, and supporting ranges; GRAD axis pinned).
      Copyright 2025 The Google Sans Project Authors
      (https://github.com/googlefonts/googlesans)
    - files/RobotoFB.ttf
-     Modified version of Roboto (internally renamed to "RobotoFB").
+     Modified version of Roboto (internally renamed to "RobotoFB";
+     wdth axis pinned).
      Copyright 2011 The Roboto Project Authors
      (https://github.com/googlefonts/roboto-classic)
    The OFL requires the fonts, modified or unmodified, to remain under the

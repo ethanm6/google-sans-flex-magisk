@@ -68,23 +68,43 @@ safety net) alongside.
 
 ## Rebuilding
 
-Both fonts come from Google Fonts (find the current variable-TTF URLs via
-`https://fonts.google.com/download/list?family=Google%20Sans%20Flex` and
-`...family=Google%20Sans`). `files/GoogleSansVF.ttf` is the Google Sans
-variable TTF, unmodified. `files/RobotoFB.ttf` is a stock Android Roboto
-variable TTF (e.g. from
-[roboto-classic](https://github.com/googlefonts/roboto-classic)) with its
-internal family renamed to `RobotoFB` — the rename matters: a font still
-internally named `Roboto` would make Gecko resolve the `Roboto` family to
-it instead of Google Sans Flex, reintroducing the bug this module fixes.
-`files/Font.ttf` is the Google Sans Flex variable
-TTF run through `patch_font.py` (which self-checks on exit; requires
+The Google fonts come from Google Fonts (find the current variable-TTF URLs
+via `https://fonts.google.com/download/list?family=Google%20Sans%20Flex` and
+`...family=Google%20Sans`).
+
+`files/Font.ttf` is the Google Sans Flex variable TTF run through
+`patch_font.py` (which self-checks on exit; requires
 [fonttools](https://github.com/fonttools/fonttools)):
 
 ```bash
 pip install fonttools
 python3 patch_font.py GoogleSansFlex.ttf files/Font.ttf
 ```
+
+Don't strip or pin any of `Font.ttf`'s six variation axes: Android 16's
+lock-screen clock animates `GRAD`/`ROND`, Gecko drives `opsz` for optical
+sizing, and the font configs use the rest.
+
+`files/GoogleSansVF.ttf` is the Google Sans variable TTF, subset to its
+fallback role — Cyrillic, Greek, combining marks, and the punctuation and
+currency ranges that appear inside those scripts — with the unused `GRAD`
+axis pinned (4.7 MB → 0.5 MB):
+
+```bash
+pyftsubset GoogleSans.ttf \
+  --unicodes="U+0020-007E,U+00A0-00FF,U+0300-036F,U+0370-03FF,U+1F00-1FFF,U+0400-04FF,U+0500-052F,U+1C80-1C8F,U+2DE0-2DFF,U+A640-A69F,U+2000-206F,U+20A0-20CF,U+2116" \
+  --layout-features='*' --name-IDs='*' --notdef-outline \
+  --output-file=GoogleSans-subset.ttf
+fonttools varLib.instancer GoogleSans-subset.ttf GRAD=0 -o files/GoogleSansVF.ttf
+```
+
+`files/RobotoFB.ttf` is a stock Android Roboto variable TTF (e.g. from
+[roboto-classic](https://github.com/googlefonts/roboto-classic)) with its
+internal family renamed to `RobotoFB` and the unused `wdth` axis pinned
+(`fonttools varLib.instancer Roboto.ttf wdth=100`); all its characters are
+kept. The rename matters: a font still internally named `Roboto` would make
+Gecko resolve the `Roboto` family to it instead of Google Sans Flex,
+reintroducing the bug this module fixes.
 
 `files/fonts.xml` and `files/font_fallback.xml` are the stock LineageOS /
 AOSP font configs with the Google Sans fallback family inserted first in
