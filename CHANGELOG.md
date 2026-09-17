@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.4.0-auto (2026-09-17)
+
+- Dropped the MMT-Extended installer template. The module no longer ships
+  `META-INF/` (recovery-flash update-binary), `common/functions.sh`,
+  `common/install.sh`, or `uninstall.sh` — Magisk's own module installer
+  already does everything they were doing.
+- All 45 font symlinks and the two `.ttf`/XML copy steps that
+  `common/install.sh` used to generate at install time are now baked
+  directly into the repo/zip under `system/fonts/`, `system/product/fonts/`,
+  and `system/etc/` (git tracks symlinks fine). Install is now a plain
+  unzip; `customize.sh` only sets the SELinux context on
+  `font_fallback.xml`.
+- `font_fallback.xml` is now always included instead of only being copied
+  when the device already had one — harmless on pre-Android-13 ROMs since
+  nothing reads it there.
+- No behavior change for installed devices.
+
 ## v1.3.0-auto (2026-07-15)
 
 - Slimmed the module from 5.9 MB to 3.5 MB with no rendering change:
