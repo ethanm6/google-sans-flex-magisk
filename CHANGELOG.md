@@ -16,6 +16,7 @@
   when the device already had one — harmless on pre-Android-13 ROMs since
   nothing reads it there.
 - No behavior change for installed devices.
+- (amended) `customize.sh` relicensed GPL-3.0-or-later, alongside `patch_font.py`, with an SPDX header added; `LICENSE` index regrouped so original code sits under GPL-3.0-or-later and only the AOSP-derived font configs stay Apache-2.0. No functional change.
 
 ## v1.3.0-auto (2026-07-15)
 
