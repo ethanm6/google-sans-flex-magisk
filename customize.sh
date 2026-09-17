@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Google Sans Flex — customize.sh
 #
 # Everything this module needs is already laid out under system/ in the

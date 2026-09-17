@@ -21,17 +21,17 @@ keeps its own license; the full texts are in the files referenced below.
    All other files under system/fonts/ and system/product/fonts/ are
    symlinks to Font.ttf and carry no separate copyright.
 
-2. Installer script and font configuration — Apache License 2.0
-   (see LICENSE-Apache2.txt)
-   - customize.sh
-     Original, Copyright 2026 ethanm6. A short set_permissions() callback
-     (a hook Magisk's own installer calls after extraction); not derived
-     from any third-party template.
-   - system/etc/fonts.xml, system/etc/font_fallback.xml
-     Derived from the Android Open Source Project / LineageOS system font
-     configuration, Copyright The Android Open Source Project.
-
-3. Font patch script — GNU General Public License v3.0 or later
+2. Original code — GNU General Public License v3.0 or later
    (see LICENSE-GPL3.txt)
+   - customize.sh
+     A short set_permissions() callback (a hook Magisk's own installer
+     calls after extraction); not derived from any third-party template.
    - patch_font.py (repository only; not part of the flashable zip)
    Copyright 2026 ethanm6.
+
+3. Font configuration — Apache License 2.0 (see LICENSE-Apache2.txt)
+   - system/etc/fonts.xml, system/etc/font_fallback.xml
+   Derived from the Android Open Source Project / LineageOS system font
+   configuration, Copyright The Android Open Source Project. Apache-2.0
+   applies here regardless of the rest of the project's licensing, since
+   it's a condition of reusing AOSP-derived code.
