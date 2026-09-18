@@ -3,5 +3,5 @@ name=Font Google Sans Flex
 version=v1.4.0-auto
 versionCode=140
 author=ethanm6, forked from AndroSYNC
-description=Systemlessly replaces Android system fonts with Google Sans Flex (official v4.005, internally renamed Roboto for correct Gecko/Firefox rendering) + Google Sans fallback for Cyrillic/Greek + stock Roboto safety net for everything else. Auto-installs full Roboto set + compatibility goodies, no prompts.+FULL+(gds)
+description=Systemlessly replaces Android system fonts with Google Sans Flex (official v4.005, internally renamed Roboto for correct Gecko/Firefox rendering) + Google Sans fallback for Cyrillic/Greek + stock Roboto safety net for everything else. Auto-installs full Roboto set + compatibility goodies, no prompts.
 updateJson=https://raw.githubusercontent.com/ethanm6/google-sans-flex-magisk/master/update.json

@@ -92,8 +92,8 @@ those edits to its own copies.
 
 Forked from [AndroSYNC](https://github.com/AndroSYNC)'s font module.
 Per-component licensing — see the [`LICENSE`](LICENSE) index: fonts SIL
-OFL 1.1, `customize.sh`/font configs Apache-2.0, `patch_font.py`
-GPL-3.0-or-later.
+OFL 1.1, `customize.sh`/`patch_font.py` GPL-3.0-or-later, font configs
+Apache-2.0.
 
 ## Support
 
