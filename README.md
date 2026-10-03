@@ -9,6 +9,12 @@ turns to tofu. Zero-prompt install; updates are offered in Magisk directly.
 Built for LineageOS / Android 16. Unofficial — not affiliated with or
 endorsed by Google. Provided as-is, without warranty; flash at your own risk.
 
+**Want current emoji too, not just the system font?**
+[noto-emoji-magisk](https://github.com/ethanm6/noto-emoji-magisk) does the
+same systemless-replace trick for `/system/fonts/NotoColorEmoji.ttf`,
+auto-updated straight from Google's own build. Doesn't touch any file this
+module does, so it's safe to flash both.
+
 ## Install
 
 1. Download the zip from the [Releases](../../releases) page.
