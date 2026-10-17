@@ -81,9 +81,9 @@ fonttools varLib.instancer gs.ttf GRAD=0 -o system/fonts/GoogleSansVF.ttf
 fonttools varLib.instancer RobotoFB-renamed.ttf wdth=100 -o system/fonts/RobotoFB.ttf
 
 # flashable zip
-zip -ry ../Google_Sans_Flex.zip . \
+zip -ry ../Google_Sans_Flex_vX.Y.Z-auto.zip . \
   -x ".*" -x ".git/*" -x "README.md" -x "patch_font.py" \
-  -x "CHANGELOG.md" -x "update.json" -x "LICENSE*"
+  -x "CHANGELOG.md" -x "update.json" -x "LICENSE*" -x "CLAUDE.md"
 ```
 
 `-y` preserves the symlinks in `system/fonts/` and `system/product/fonts/`

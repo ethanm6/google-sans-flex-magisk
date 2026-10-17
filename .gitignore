@@ -1,3 +1,5 @@
 CLAUDE.md
 *.zip
 *.bak
+__pycache__/
+Font.patched.ttf
