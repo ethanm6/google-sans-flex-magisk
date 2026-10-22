@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.4.1-auto (2026-10-22)
+
+- Fixed a SIGSEGV in Google Wallet's add-card flow (`com.google.android.gms.ui`).
+  Processes hidden from the Magisk overlay (DenyList / Shamiko / Tricky Store,
+  notably GMS) received a serialized system `Typeface` whose font map pointed at
+  the module-only fallbacks `GoogleSansVF.ttf` / `RobotoFB.ttf`; the lazy reload
+  could not open them and `minikin::Font::prepareFont` crashed.
+- The two custom fallbacks now ship under stock filenames so every serialized
+  font path also exists in the stock ROM: `GoogleSansVF.ttf` → `DroidSans.ttf`
+  and `RobotoFB.ttf` → `RobotoStatic-Regular.ttf`. Visible apps keep the custom
+  fonts; `Font.ttf` (including the GRAD/ROND clock axes) is unchanged.
+- Fixed two dangling font references: `DancingScript-Bold.ttf` is now
+  `DancingScript-Regular.ttf`, and `NotoSerifKhmer-Regular.otf` is now
+  `NotoSerifKhmer-Regular.ttf`.
+- Added the `google-sans-flex*` family aliases requested by the LineageOS font
+  overlay so they never resolve to an empty family.
+
 ## v1.4.0-auto (2026-09-17)
 
 - Dropped the MMT-Extended installer template. The module no longer ships
