@@ -2,9 +2,10 @@
 
 Systemlessly replaces the Android system font with **Google Sans Flex**,
 patched so Firefox/Gecko browsers render it correctly. **Google Sans** is
-bundled as the Cyrillic/Greek fallback and stock **Roboto** (`RobotoFB.ttf`)
-as a last-resort safety net, so nothing that rendered before the module
-turns to tofu. Zero-prompt install; updates are offered in Magisk directly.
+bundled as the Cyrillic/Greek fallback and stock **Roboto**
+(`RobotoStatic-Regular.ttf`) as a last-resort safety net, so nothing that
+rendered before the module turns to tofu. Zero-prompt install; updates are
+offered in Magisk directly.
 
 Built for LineageOS / Android 16. Unofficial — not affiliated with or
 endorsed by Google. Provided as-is, without warranty; flash at your own risk.
@@ -27,7 +28,8 @@ Firefox resolves the CSS `sans-serif` family by the font's *internal* name
 and expects `Roboto`. With a font named "Google Sans Flex" it silently falls
 back to Fira Sans, which shows up as small-caps body text on many sites. So
 `Font.ttf` is internally renamed to `Roboto` — and the bundled real Roboto
-is renamed to `RobotoFB`, so Gecko never sees two fonts claiming that name.
+is renamed internally to `RobotoFB` (shipped as `RobotoStatic-Regular.ttf`),
+so Gecko never sees two fonts claiming that name.
 
 ## Module layout
 
@@ -38,13 +40,12 @@ no install-time codegen:
 customize.sh              # sets the SELinux context on font_fallback.xml;
                            # everything else is Magisk's own default install
 module.prop
-update.json
 system/
 ├── fonts/
 │   ├── Font.ttf           # real file: Google Sans Flex, renamed to Roboto
-│   ├── GoogleSansVF.ttf   # real file: Google Sans, Cyrillic/Greek fallback
-│   ├── RobotoFB.ttf       # real file: stock Roboto, safety net
-│   └── *.ttf               -> Font.ttf   (45 symlinks — every Roboto/
+│   ├── DroidSans.ttf      # real file: Google Sans, Cyrillic/Greek fallback
+│   ├── RobotoStatic-Regular.ttf  # real file: stock Roboto, safety net
+│   └── *.ttf               -> Font.ttf   (44 symlinks — every Roboto/
 │                                           Google Sans/Droid/Noto alias
 │                                           Android and apps look for)
 ├── product/fonts/
@@ -75,19 +76,27 @@ python3 patch_font.py GoogleSansFlex.ttf system/fonts/Font.ttf
 pyftsubset GoogleSans.ttf \
   --unicodes="U+0020-007E,U+00A0-00FF,U+0300-036F,U+0370-03FF,U+1F00-1FFF,U+0400-04FF,U+0500-052F,U+1C80-1C8F,U+2DE0-2DFF,U+A640-A69F,U+2000-206F,U+20A0-20CF,U+2116" \
   --layout-features='*' --name-IDs='*' --notdef-outline --output-file=gs.ttf
-fonttools varLib.instancer gs.ttf GRAD=0 -o system/fonts/GoogleSansVF.ttf
+fonttools varLib.instancer gs.ttf GRAD=0 -o system/fonts/DroidSans.ttf
 
 # safety net: Roboto internally renamed to RobotoFB, unused wdth axis pinned
-fonttools varLib.instancer RobotoFB-renamed.ttf wdth=100 -o system/fonts/RobotoFB.ttf
+fonttools varLib.instancer RobotoFB-renamed.ttf wdth=100 -o system/fonts/RobotoStatic-Regular.ttf
 
 # flashable zip
 zip -ry ../Google_Sans_Flex_vX.Y.Z-auto.zip . \
   -x ".*" -x ".git/*" -x "README.md" -x "patch_font.py" \
-  -x "CHANGELOG.md" -x "update.json" -x "LICENSE*" -x "CLAUDE.md"
+  -x "CHANGELOG.md" -x "update.json" -x "LICENSE*" -x "CLAUDE.md" -x "AGENTS.md"
 ```
 
 `-y` preserves the symlinks in `system/fonts/` and `system/product/fonts/`
 as symlinks instead of dereferencing them into duplicate font files.
+
+Both fallbacks deliberately use **stock filenames** (`DroidSans.ttf`,
+`RobotoStatic-Regular.ttf`). Processes hidden from the Magisk overlay
+(DenyList / Shamiko / Tricky Store, notably GMS) can still receive a
+serialized system `Typeface`: every path in its font map must also exist in
+the stock ROM, or the lazy reload returns null and the process SIGSEGVs in
+`minikin::Font::prepareFont` (the Google Wallet add-card crash). Don't
+rename these fallbacks to module-only names.
 
 `system/etc/fonts.xml` and `system/etc/font_fallback.xml` are the stock
 LineageOS/AOSP configs with the two fallback families added and italics

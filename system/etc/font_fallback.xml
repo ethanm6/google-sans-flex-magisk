@@ -80,17 +80,22 @@
   </family>
   <!-- UnFont module: Google Sans fallback for scripts Google Sans Flex lacks
        (Cyrillic incl. Ukrainian, and Greek). Must be the first fallback family
-       so these scripts render in the Google Sans superfamily instead of tofu. -->
+       so these scripts render in the Google Sans superfamily instead of tofu.
+       Shipped as DroidSans.ttf so every font path serialized by system_server
+       also exists in the stock ROM: processes hidden from the Magisk overlay
+       (DenyList/Shamiko) must still be able to lazily reopen it. -->
   <family lang="und-Cyrl,und-Grek">
-    <font supportedAxes="wght" postScriptName="GoogleSans-Regular">GoogleSansVF.ttf</font>
+    <font supportedAxes="wght" postScriptName="GoogleSans-Regular">DroidSans.ttf</font>
   </family>
   <!-- UnFont module: the stock Roboto (internally renamed RobotoFB) as a safety
        net for every character stock Roboto covered but Google Sans Flex / Google
        Sans lack: combining marks (e.g. U+0336 strikethrough), modifier letters,
        extended Latin/Cyrillic/Greek. Renamed so Gecko browsers keep resolving
-       the "Roboto" family to Google Sans Flex. -->
+       the "Roboto" family to Google Sans Flex; shipped as the stock
+       RobotoStatic-Regular.ttf name for the overlay-hidden-process reason
+       above. -->
   <family>
-    <font supportedAxes="wght,ital" postScriptName="RobotoFB-Regular">RobotoFB.ttf</font>
+    <font supportedAxes="wght,ital" postScriptName="RobotoFB-Regular">RobotoStatic-Regular.ttf</font>
   </family>
   <family lang="und-Arab" variant="elegant">
     <font weight="400" style="normal" postScriptName="NotoNaskhArabic">NotoNaskhArabic-Regular.ttf</font>

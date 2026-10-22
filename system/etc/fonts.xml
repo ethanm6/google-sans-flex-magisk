@@ -130,6 +130,15 @@
     <alias name="tahoma" to="sans-serif" />
     <alias name="verdana" to="sans-serif" />
 
+    <!-- LineageOS 23 font-overlay compatibility: org.lineageos.overlay.font.googlesansflex
+         points config_bodyFontFamily / config_headlineFontFamily / config_clockFontFamily
+         (and their -medium variants) at these names, which stock fonts.xml does not define.
+         Resolve them onto the Google Sans Flex sans-serif family so they never end up as an
+         empty family (null MinikinFont -> libminikin SIGSEGV). -->
+    <alias name="google-sans-flex" to="sans-serif" />
+    <alias name="google-sans-flex-medium" to="sans-serif" weight="500" />
+    <alias name="google-sans-flex-clock" to="sans-serif" />
+
     <family name="sans-serif-condensed">
       <font weight="100" style="normal">Roboto-Regular.ttf
         <axis tag="ital" stylevalue="0" />
@@ -260,7 +269,7 @@
     <family name="cursive">
         <font weight="400" style="normal" postScriptName="DancingScript">DancingScript-Regular.ttf
         </font>
-        <font weight="700" style="normal">DancingScript-Bold.ttf</font>
+        <font weight="700" style="normal">DancingScript-Regular.ttf</font>
     </family>
 
     <family name="sans-serif-smallcaps">
@@ -282,37 +291,45 @@
          has no Cyrillic/Greek glyphs, and stock Android relies on Roboto
          itself for these scripts, so without this entry they render as
          tofu. First in the fallback list so these scripts keep the
-         Google Sans look instead of falling through to CJK fonts. -->
+         Google Sans look instead of falling through to CJK fonts.
+         Shipped as DroidSans.ttf on purpose: a serialized Typeface may be
+         deserialized in a process that cannot see the Magisk overlay
+         (DenyList/Shamiko). Every path in the font map must therefore also
+         exist in the stock ROM, or the lazy reload returns null and the
+         process crashes in minikin::Font::prepareFont. -->
     <family>
-        <font weight="400" style="normal">GoogleSansVF.ttf
+        <font weight="400" style="normal">DroidSans.ttf
           <axis tag="wght" stylevalue="400" />
         </font>
-        <font weight="500" style="normal">GoogleSansVF.ttf
+        <font weight="500" style="normal">DroidSans.ttf
           <axis tag="wght" stylevalue="500" />
         </font>
-        <font weight="600" style="normal">GoogleSansVF.ttf
+        <font weight="600" style="normal">DroidSans.ttf
           <axis tag="wght" stylevalue="600" />
         </font>
-        <font weight="700" style="normal">GoogleSansVF.ttf
+        <font weight="700" style="normal">DroidSans.ttf
           <axis tag="wght" stylevalue="700" />
         </font>
     </family>
 
-    <!-- UnFont module: stock Roboto (renamed RobotoFB) as a safety net for
-         characters Google Sans Flex / Google Sans lack (combining marks,
-         modifier letters, extended Latin/Cyrillic/Greek). -->
+    <!-- UnFont module: stock Roboto (renamed internally to RobotoFB) as a
+         safety net for characters Google Sans Flex / Google Sans lack
+         (combining marks, modifier letters, extended Latin/Cyrillic/Greek).
+         Shipped as RobotoStatic-Regular.ttf so processes that cannot see the
+         Magisk overlay still find a stock file at this path; see the note on
+         DroidSans.ttf above. -->
     <family>
-        <font weight="400" style="normal">RobotoFB.ttf</font>
-        <font weight="500" style="normal">RobotoFB.ttf
+        <font weight="400" style="normal">RobotoStatic-Regular.ttf</font>
+        <font weight="500" style="normal">RobotoStatic-Regular.ttf
           <axis tag="wght" stylevalue="500" />
         </font>
-        <font weight="700" style="normal">RobotoFB.ttf
+        <font weight="700" style="normal">RobotoStatic-Regular.ttf
           <axis tag="wght" stylevalue="700" />
         </font>
-        <font weight="400" style="italic">RobotoFB.ttf
+        <font weight="400" style="italic">RobotoStatic-Regular.ttf
           <axis tag="ital" stylevalue="1" />
         </font>
-        <font weight="700" style="italic">RobotoFB.ttf
+        <font weight="700" style="italic">RobotoStatic-Regular.ttf
           <axis tag="wght" stylevalue="700" />
           <axis tag="ital" stylevalue="1" />
         </font>
@@ -960,7 +977,7 @@
             <axis tag="wdth" stylevalue="100.0"/>
             <axis tag="wght" stylevalue="190.0"/>
         </font>
-        <font weight="400" style="normal" fallbackFor="serif">NotoSerifKhmer-Regular.otf</font>
+        <font weight="400" style="normal" fallbackFor="serif">NotoSerifKhmer-Regular.ttf</font>
         <font weight="700" style="normal" fallbackFor="serif">NotoSerifKhmer-Bold.otf</font>
     </family>
     <family lang="und-Khmr" variant="compact">
